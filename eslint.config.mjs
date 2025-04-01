@@ -31,7 +31,7 @@ export default tseslint.config(
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       'indent': ['error', 2, { SwitchCase: 1 }],
-      'max-len': ['error', { 'code': 100, 'tabWidth': 2, 'ignoreUrls': true }],
+      'max-len': ['error', { 'code': 120, 'tabWidth': 2, 'ignoreUrls': true }],
       'quotes': ['error', 'single', { 'avoidEscape': true }],
       'operator-linebreak': ['error', 'before'],
       'no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 1, 'maxBOF': 0 }],

@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { Order } from './entities/Order';
+import { OrderModule } from './order/order.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -15,11 +18,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         port: Number(configService.get('ORDER_DB_PORT')),
         username: configService.get('ORDER_DB_USER_NAME'),
         password: configService.get('ORDER_DB_USER_PASSWORD'),
-        entities: [],
+        entities: [Order],
         migrations: [],
         synchronize: false,
       }),
     }),
+    OrderModule,
   ],
   controllers: [],
   providers: [],

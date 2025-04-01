@@ -6,7 +6,12 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export type PaymentType = 'cash' | 'card' | 'transfer'
+// export type PaymentType = 'cash' | 'card' | 'transfer'
+export enum PaymentType {
+  CASH = 'cash',
+  CARD = 'card',
+  TRANSFER = 'transfer',
+}
 
 @Entity()
 export class Order {
@@ -21,8 +26,8 @@ export class Order {
 
   @Column({
     type: 'enum',
-    enum: ['cash', 'card', 'transfer'],
-    default: 'card',
+    enum: PaymentType,
+    default: PaymentType.CARD,
   })
     paymentType: PaymentType;
   
