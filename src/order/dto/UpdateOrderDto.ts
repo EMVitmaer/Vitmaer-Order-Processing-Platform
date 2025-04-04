@@ -17,7 +17,7 @@ export class UpdateOrderDto {
   })
   @IsString()
   @IsOptional()
-    name: string;
+    name?: string;
 
   @ApiProperty({ 
     type: Number, 
@@ -27,7 +27,7 @@ export class UpdateOrderDto {
   })
   @IsNumber()
   @IsOptional()
-    price: number;
+    price?: number;
   
   @ApiProperty({
     enum: PaymentType, 
@@ -37,5 +37,5 @@ export class UpdateOrderDto {
   })
   @IsEnum(PaymentType, { message: 'Invalid payment type' })
   @IsOptional()
-    paymentType: PaymentType;
+    paymentType?: PaymentType;
 }
