@@ -22,7 +22,7 @@ export class OrderService {
     return order;
   }
 
-  getAllOrders() {
+  async getAllOrders() {
     return this.repoOrder.find();
   }
 
@@ -39,8 +39,12 @@ export class OrderService {
     const savedOrders: Order[] = [];
 
     for (const order of dto.orders) {
-      const createdOrder = await this.createOrder(order);
-      savedOrders.push(createdOrder);
+      try {
+        const createdOrder = await this.createOrder(order);
+        savedOrders.push(createdOrder);
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     return savedOrders;
@@ -48,15 +52,14 @@ export class OrderService {
 
   async updateOrder(dto: UpdateOrderDto) {
     const { id, ...data } = dto;
-    const order = await this.repoOrder.findOne({ where: { id }});
-    
-    if (!order) throw new HttpException('Fail find of order by id', HttpStatus.BAD_REQUEST);
+
+    await this.getOrderById(id);
 
     const updateInfo = await this.repoOrder.update(id, data);
 
     if (updateInfo.affected === 0) throw new HttpException('Fail update of order', HttpStatus.INTERNAL_SERVER_ERROR);
 
-    return await this.repoOrder.findOne({ where: { id }});
+    return await this.getOrderById(id);
   }
 
   async updateManyOrders(dto: UpdateOrdersDto) {
@@ -65,9 +68,6 @@ export class OrderService {
     for (const order of dto.orders) {
       try {
         const updateOrder = await this.updateOrder(order);
-        
-        if (!updateOrder) throw new HttpException('Fail update of order', HttpStatus.INTERNAL_SERVER_ERROR);
-              
         updatedOrders.push(updateOrder);
       } catch (error) {
         updatedOrders.push({ 
@@ -81,9 +81,7 @@ export class OrderService {
   }
 
   async deleteOrder(id: number) {
-    const order = await this.repoOrder.findOne({ where: { id }});
-    
-    if (!order) throw new HttpException('Fail find of order by id', HttpStatus.BAD_REQUEST);
+    await this.getOrderById(id);
 
     const deleteInfo = await this.repoOrder.delete(id);
     
@@ -94,6 +92,7 @@ export class OrderService {
 
   async deleteManyOrders(dto: DeleteOrdersDto) {
     let someDeleted = false;
+    
     for (const id of dto.ids) {
       try {
         await this.deleteOrder(id);
