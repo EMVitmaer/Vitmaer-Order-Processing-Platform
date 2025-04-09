@@ -12,6 +12,7 @@ services:
         restart: true
     networks:
       - backend
+    command: sh -c "npm run typeorm:run && node dist/main"
   
   db:
     image: postgres:14.17
